@@ -1,0 +1,50 @@
+@charset "UTF-8";
+/* Создаём переменные для карточки */
+/* Определяем миксин для основного вида карточки */
+.product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 16px;
+  padding: 16px;
+  max-width: 320px;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.product-card:hover {
+  transform: scale(1.02);
+}
+.product-card__image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.product-card__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+}
+.product-card__description {
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+.product-card__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  width: fit-content;
+}
+.product-card__cta:hover {
+  filter: brightness(1.05);
+}
+
+/*# sourceMappingURL=main.css.map */

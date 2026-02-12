@@ -1,0 +1,20 @@
+{
+  "name": "frontend-and-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:sass": "sass styles/main.scss styles/main.css",
+    "watch:sass": "sass --watch styles/main.scss styles/main.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.28.1",
+  "dependencies": {
+    "sass": "^1.97.3"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

@@ -1,0 +1,63 @@
+/* Создаём переменные для карточки */
+$card-bg: #ffffff;
+$card-radius: 16px;
+$brand-accent: #2563eb;
+$text-muted: #6b7280;
+$spacing: 16px;
+
+/* Определяем миксин для основного вида карточки */
+@mixin card-surface($bg, $radius) {
+  background: $bg;
+  border-radius: $radius;
+}
+
+.product-card {
+  @include card-surface($card-bg, $card-radius);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: $spacing;
+  padding: $spacing;
+  max-width: 320px;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: $card-radius - 6px;
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+  }
+
+  &__description {
+    color: $text-muted;
+    line-height: 1.5;
+    margin: 0 0 12px 0;
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: $brand-accent;
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+    width: fit-content;
+
+    &:hover {
+      filter: brightness(1.05);
+    }
+  }
+}
