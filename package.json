@@ -1,0 +1,28 @@
+{
+  "name": "frontend-and-backend",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.28.1",
+  "description": "",
+  "author": "Aleksey Demchenkov <contact@pelfox.dev>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^7.4.3",
+    "@types/node": "^25.2.3",
+    "eslint": "^9.39.2",
+    "eslint-plugin-format": "^1.4.0",
+    "prettier": "^3.8.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
