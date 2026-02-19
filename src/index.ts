@@ -64,7 +64,7 @@ app.post('/', (req, res) => {
 
 // Endpoint для обновления товара в хранилище.
 app.patch('/:id', (req, res) => {
-  const good = validateGoodRequest(req, res);
+  const good = validateGoodRequest(req);
   if (!good) {
     return res
       .status(400)
