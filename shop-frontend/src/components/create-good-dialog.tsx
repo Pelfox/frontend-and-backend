@@ -1,4 +1,5 @@
 import type { FormEvent } from 'react';
+import type { FetchedGood } from '../hooks/use-goods';
 import { useState } from 'react';
 import { Button } from './button';
 import { Dialog } from './dialog';
@@ -7,16 +8,18 @@ interface CreateGoodDialogProps {
   open: boolean;
   onClose: () => void;
   onCreated: () => void;
+  initialGood?: FetchedGood;
 }
 
 export function CreateGoodDialog(props: CreateGoodDialogProps) {
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [quantity, setQuantity] = useState('');
+  const [title, setTitle] = useState(props.initialGood?.title ?? '');
+  const [category, setCategory] = useState(props.initialGood?.category ?? '');
+  const [description, setDescription] = useState(props.initialGood?.description ?? '');
+  const [price, setPrice] = useState(props.initialGood?.price.toString() ?? '');
+  const [quantity, setQuantity] = useState(props.initialGood?.quantity.toString() ?? '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageURL, setImageURL] = useState<string>(props.initialGood?.imageURL ?? '');
 
   function resetForm() {
     setTitle('');
@@ -65,11 +68,17 @@ export function CreateGoodDialog(props: CreateGoodDialogProps) {
       setError('Количество должно быть неотрицательным целым числом.');
       return;
     }
+    if (
+      !imageURL
+    ) {
+      setError('Количество должно быть неотрицательным целым числом.');
+      return;
+    }
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('http://localhost:3000/goods', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:3000/goods${props.initialGood ? `/${props.initialGood.id}` : ''}`, {
+        method: props.initialGood ? 'PATCH' : 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -80,6 +89,7 @@ export function CreateGoodDialog(props: CreateGoodDialogProps) {
           description: description.trim(),
           price: parsedPrice,
           quantity: parsedQuantity,
+          imageURL,
         }),
       });
 
@@ -102,6 +112,24 @@ export function CreateGoodDialog(props: CreateGoodDialogProps) {
     }
   }
 
+  function handleDelete() {
+    setIsSubmitting(true);
+    fetch(`http://localhost:3000/goods/${props.initialGood?.id}`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Ошибка при удалении товара');
+        }
+        props.onCreated();
+        props.onClose();
+      })
+      .catch((error) => {
+        setError(error instanceof Error ? error.message : 'Произошла неизвестная ошибка');
+        setIsSubmitting(false);
+      });
+  }
+
   const inputClassName =
     'w-full rounded-lg border border-neutral-300 bg-white px-3.5 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition-colors focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900';
 
@@ -109,7 +137,7 @@ export function CreateGoodDialog(props: CreateGoodDialogProps) {
 
   return (
     <Dialog open={props.open} onClose={handleClose} title="Новый товар">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4">
         {/* Сообщение об ошибке */}
         {error && (
           <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
@@ -163,7 +191,7 @@ export function CreateGoodDialog(props: CreateGoodDialogProps) {
         </div>
 
         {/* Цена и количество */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           <div>
             <label htmlFor="good-price" className={labelClassName}>
               Цена, ₽
@@ -196,19 +224,37 @@ export function CreateGoodDialog(props: CreateGoodDialogProps) {
           </div>
         </div>
 
+        {/* Изображение */}
+        <div>
+          <label htmlFor="good-image" className={labelClassName}>
+            Изображение
+          </label>
+          <input
+            id="good-image"
+            placeholder="Введите ссылку на изображение товара"
+            value={imageURL}
+            onChange={(e) => setImageURL(e.target.value)}
+            className={inputClassName}
+          />
+        </div>
         {/* Действия */}
-        <div className="mt-2 flex items-center justify-end gap-3 border-t border-neutral-100 pt-4">
+        <div className="mt-2 flex flex-col-reverse gap-2 border-t border-neutral-100 pt-4 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
           <button
             type="button"
             onClick={handleClose}
             disabled={isSubmitting}
-            className="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-100 disabled:opacity-50"
+            className="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-100 disabled:opacity-50 w-full sm:w-auto"
           >
             Отмена
           </button>
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Создание...' : 'Создать товар'}
+            {props.initialGood ? (isSubmitting ? 'Редактирование...' : 'Редактировать') : (isSubmitting ? 'Создание...' : 'Создать товар')}
           </Button>
+          {props.initialGood && (
+            <Button type="button" onClick={handleDelete} disabled={isSubmitting}>
+              {isSubmitting ? 'Удаление...' : 'Удалить товар'}
+            </Button>
+          )}
         </div>
       </form>
     </Dialog>

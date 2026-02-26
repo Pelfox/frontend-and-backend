@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 
-interface FetchedGood {
+export interface FetchedGood {
   id: string;
   title: string;
   category: string;
   description: string;
   price: number;
   quantity: number;
+  imageURL: string;
 }
 
 export function useGoods(refreshKey: number = 0) {

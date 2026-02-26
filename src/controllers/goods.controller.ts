@@ -24,7 +24,7 @@ goodsController.get('/:id', (req, res) => {
 
 // Создать новый товар
 goodsController.post('/', (req, res) => {
-  const { title, category, description, price, quantity } = req.body;
+  const { title, category, description, price, quantity, imageURL } = req.body;
   const errors: string[] = [];
 
   if (!title || typeof title !== 'string') {
@@ -50,6 +50,9 @@ goodsController.post('/', (req, res) => {
       'Поле "quantity" обязательно и должно быть неотрицательным целым числом',
     );
   }
+  if (!imageURL || typeof imageURL !== 'string') {
+    errors.push('Поле "imageURL" обязательно и должно быть строкой');
+  }
 
   if (errors.length > 0) {
     res.status(400).json({ errors });
@@ -63,6 +66,7 @@ goodsController.post('/', (req, res) => {
     description: description.trim(),
     price,
     quantity,
+    imageURL,
   };
 
   goodsStorage.push(good);
@@ -80,4 +84,71 @@ goodsController.delete('/:id', (req, res) => {
 
   goodsStorage.splice(index, 1);
   res.status(204).send();
+});
+
+goodsController.patch('/:id', (req, res) => {
+  const good = goodsStorage.find((g) => g.id === req.params.id);
+  if (!good) {
+    res.status(404).json({ error: 'Товар не найден' });
+    return;
+  }
+
+  const { title, category, description, price, quantity, imageURL } = req.body;
+  if (title !== undefined) {
+    if (typeof title !== 'string') {
+      res.status(400).json({ error: 'Поле "title" должно быть строкой' });
+      return;
+    }
+    good.title = title.trim();
+  }
+
+  if (category !== undefined) {
+    if (typeof category !== 'string') {
+      res.status(400).json({ error: 'Поле "category" должно быть строкой' });
+      return;
+    }
+    good.category = category.trim();
+  }
+
+  if (description !== undefined) {
+    if (typeof description !== 'string') {
+      res.status(400).json({ error: 'Поле "description" должно быть строкой' });
+      return;
+    }
+    good.description = description.trim();
+  }
+
+  if (price !== undefined) {
+    if (typeof price !== 'number' || price < 0) {
+      res
+        .status(400)
+        .json({ error: 'Поле "price" должно быть неотрицательным числом' });
+      return;
+    }
+    good.price = price;
+  }
+
+  if (quantity !== undefined) {
+    if (
+      typeof quantity !== 'number' ||
+      !Number.isInteger(quantity) ||
+      quantity < 0
+    ) {
+      res.status(400).json({
+        error: 'Поле "quantity" должно быть неотрицательным целым числом',
+      });
+      return;
+    }
+    good.quantity = quantity;
+  }
+
+  if (imageURL !== undefined) {
+    if (typeof imageURL !== 'string') {
+      res.status(400).json({ error: 'Поле "imageURL" должно быть строкой' });
+      return;
+    }
+    good.imageURL = imageURL;
+  }
+
+  res.json(good);
 });

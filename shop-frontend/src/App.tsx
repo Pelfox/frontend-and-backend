@@ -25,7 +25,7 @@ export default function App() {
         <h2 className="text-2xl font-semibold">Доступные товары</h2>
         <div className="grid grid-cols-4 gap-6 mt-6">
           {goods.map((good) => (
-            <GoodCard key={good.id} {...good} />
+            <GoodCard key={good.id} {...good} onUpdated={handleGoodCreated} />
           ))}
         </div>
       </section>
