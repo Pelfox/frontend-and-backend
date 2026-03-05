@@ -1,11 +1,13 @@
-import { Router } from 'express';
-import {
-  validateRequestBody,
-  type LoginRequestDTO,
-  type LoginResponseDTO,
-  type RegisterRequestDTO,
-  type RegisterResponseDTO,
+import type {
+  LoginRequestDTO,
+  LoginResponseDTO,
+  RegisterRequestDTO,
+  RegisterResponseDTO,
 } from '../dto/index.js';
+import { Router } from 'express';
+import { authMiddleware } from '../auth.middleware.js';
+import { validateRequestBody } from '../dto/index.js';
+import { createAccessToken } from '../jwt.service.js';
 import { createUser, loginUser } from '../userStorage.js';
 
 export const authRouter: Router = Router();
@@ -33,7 +35,9 @@ authRouter.post('/register', (req, res) => {
   }
 
   const response = registrationResult.user as RegisterResponseDTO;
-  return res.status(201).json(response);
+  const { password_hash, ...user } = response;
+
+  return res.status(201).json(user);
 });
 
 authRouter.post('/login', (req, res) => {
@@ -56,6 +60,16 @@ authRouter.post('/login', (req, res) => {
     });
   }
 
-  const response = loginResult.user as LoginResponseDTO;
+  const { password_hash, ...user } = loginResult.user;
+  const access_token = createAccessToken(loginResult.user);
+
+  const response = {
+    access_token,
+    ...user,
+  } as LoginResponseDTO;
   return res.status(200).json(response);
+});
+
+authRouter.get('/me', authMiddleware, (req, res) => {
+  res.status(200).json(req.user);
 });

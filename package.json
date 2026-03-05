@@ -15,9 +15,16 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write ."
   },
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "^7.6.1",
     "@types/bcrypt": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.3.3",
     "eslint": "^10.0.2",
     "eslint-plugin-format": "^2.0.1",
@@ -25,10 +32,5 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "@types/express": "^5.0.6",
-    "bcrypt": "^6.0.0",
-    "express": "^5.2.1"
   }
 }

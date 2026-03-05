@@ -15,4 +15,6 @@ export interface LoginRequestDTO {
   password: string;
 }
 
-export interface LoginResponseDTO extends User {}
+export interface LoginResponseDTO extends User {
+  access_token: string;
+}

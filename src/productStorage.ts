@@ -1,9 +1,9 @@
-import { randomUUID } from 'node:crypto';
 import type {
   CreateProductRequestDTO,
   UpdateProductRequestDTO,
 } from './dto/products.js';
 import type { Product } from './models/product.js';
+import { randomUUID } from 'node:crypto';
 
 let products: Product[] = [];
 
@@ -33,7 +33,6 @@ export const createProduct = (
 
   const { price, ...rest } = request;
   const parsedPrice = Number(price);
-  console.log('Parsed price:', parsedPrice);
 
   if (Number.isNaN(parsedPrice) || !Number.isFinite(parsedPrice)) {
     return {

@@ -21,16 +21,13 @@ export const validateRequestBody = <T>(
 
   const request = body as Record<string, unknown>;
   const invalidFields = fields.filter((field) => {
-    console.log('Scanning for field:', field);
     const requestField = request[field];
-    console.log('Request field:', requestField, typeof requestField);
     if (!requestField || typeof requestField !== 'string') {
       return true;
     }
     return requestField.trim().length === 0;
   });
 
-  console.log('Invalid fields are:', invalidFields);
   if (invalidFields.length !== 0) {
     return { ok: false, invalidFields };
   }

@@ -1,7 +1,7 @@
-import { randomUUID } from 'node:crypto';
 import type { LoginRequestDTO, RegisterRequestDTO } from './dto/auth.js';
 import type { User } from './models/user.js';
-import { hashSync, compareSync } from 'bcrypt';
+import { randomUUID } from 'node:crypto';
+import { compareSync, hashSync } from 'bcrypt';
 
 const users: User[] = [];
 const bcryptHashRounds = 10;

@@ -1,9 +1,10 @@
-import { Router } from 'express';
-import {
-  validateRequestBody,
-  type CreateProductRequestDTO,
-  type CreateProductResponseDTO,
+import type {
+  CreateProductRequestDTO,
+  CreateProductResponseDTO,
 } from '../dto/index.js';
+import { Router } from 'express';
+import { authMiddleware } from '../auth.middleware.js';
+import { validateRequestBody } from '../dto/index.js';
 import {
   createProduct,
   deleteProduct,
@@ -44,8 +45,8 @@ productsRouter.get('/', (_, res) => {
   return res.status(200).json(products);
 });
 
-productsRouter.get('/:id', (req, res) => {
-  const getResult = getProductByID(req.params.id);
+productsRouter.get('/:id', authMiddleware, (req, res) => {
+  const getResult = getProductByID(req.params.id as string);
   if (!getResult.ok) {
     return res.status(400).json({
       message: getResult.message,
@@ -54,8 +55,8 @@ productsRouter.get('/:id', (req, res) => {
   return res.status(200).json(getResult.value);
 });
 
-productsRouter.put('/:id', (req, res) => {
-  const updateResult = updateProduct(req.params.id, req.body);
+productsRouter.put('/:id', authMiddleware, (req, res) => {
+  const updateResult = updateProduct(req.params.id as string, req.body);
   if (!updateResult.ok) {
     return res.status(400).json({
       message: updateResult.message,
@@ -64,8 +65,8 @@ productsRouter.put('/:id', (req, res) => {
   return res.status(200).json(updateResult.value);
 });
 
-productsRouter.delete('/:id', (req, res) => {
-  const deleteResult = deleteProduct(req.params.id);
+productsRouter.delete('/:id', authMiddleware, (req, res) => {
+  const deleteResult = deleteProduct(req.params.id as string);
   if (!deleteResult.ok) {
     return res.status(400).json({
       message: deleteResult.message,
