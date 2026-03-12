@@ -17,4 +17,18 @@ export interface LoginRequestDTO {
 
 export interface LoginResponseDTO extends User {
   access_token: string;
+  refresh_token: string;
+}
+
+export interface RefreshRequestDTO {
+  refresh_token: string;
+}
+
+export interface RefreshResponseDTO {
+  access_token: string;
+  refresh_token: string;
+}
+
+export interface LogoutRequestDTO {
+  refresh_token: string;
 }

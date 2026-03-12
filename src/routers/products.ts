@@ -72,5 +72,5 @@ productsRouter.delete('/:id', authMiddleware, (req, res) => {
       message: deleteResult.message,
     });
   }
-  return res.status(204);
+  return res.status(204).send();
 });

@@ -35,6 +35,10 @@ export const createUser = (request: RegisterRequestDTO): UserAuthResult => {
   return { ok: true, user };
 };
 
+export const findUserById = (id: string): User | null => {
+  return users.find((user) => user.id === id) ?? null;
+};
+
 export const loginUser = (request: LoginRequestDTO): UserAuthResult => {
   const existingUser = users.find((user) => user.email === request.email);
   if (!existingUser) {

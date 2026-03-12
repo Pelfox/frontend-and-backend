@@ -7,4 +7,13 @@ export interface User {
 
 export interface LoggedUser extends User {
   access_token: string;
+  refresh_token: string;
+}
+
+export interface Product {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  price: number;
 }
